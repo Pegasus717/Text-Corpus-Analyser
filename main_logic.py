@@ -49,4 +49,5 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
              continue
         filtered.append(token)
     return filtered
-
+def find_palindromes(words):
+    return sorted({w for w in words if len(w) > 2 and w == w[::-1]})
