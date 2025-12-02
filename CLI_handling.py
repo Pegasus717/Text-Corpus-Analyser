@@ -19,6 +19,10 @@ def build_parser():
     add_input_options(p1)
     p1.add_argument("output")
     add_word_filters(p1)
-
+    
+    p2 = sub.add_parser("anagram")
+    add_input_options(p2)
+    p2.add_argument("output")
+    add_word_filters(p2)
     
 
