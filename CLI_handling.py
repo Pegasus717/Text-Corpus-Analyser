@@ -6,4 +6,9 @@ def build_parser():
                                      formatter_class=argparse.RawTextHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
 
+    def add_input_options(p):
+        p.add_argument("input", nargs="?", help="Input file path (optional if using --text)")
+        p.add_argument("-t", "--text", dest="input_text", help="Provide text directly instead of file path")
     
+    
+
