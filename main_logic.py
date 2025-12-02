@@ -6,7 +6,7 @@ def normalize_word(w: str) -> str:
     return normalized if normalized else w.lower()
 
 def extract_words(text: str, stopwords=None, starts_with=None):
-    words = re.findall(r"[a-zA-Z]+", text)
+    words = re.findall(r"[a-zA-ZÀ-ÖØ-öø-ÿ]+", text)
     normalized = [normalize_word(w) for w in words]
     stopword_set = {normalize_word(w) for w in stopwords} if stopwords else set()
     starts_with = starts_with.lower()[0] if starts_with else None
