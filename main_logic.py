@@ -31,7 +31,7 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
         for w in stopwords:
             normalized_stopword = re.sub(r'[^\x00-\x7F]+', '', w.lower())
             if normalized_stopword:
-                stopword_set.add(normalized_stopword)
+              stopword_set.add(normalized_stopword)
     
     starts_with_char = None
     if starts_with:
