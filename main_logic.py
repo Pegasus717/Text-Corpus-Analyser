@@ -40,6 +40,7 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
         else:
             starts_with_char = starts_with.lower()[0]
     
+    
     filtered = []
     for token in normalized:
         if stopword_set and token in stopword_set:
