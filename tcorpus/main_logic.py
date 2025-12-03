@@ -63,4 +63,7 @@ def find_frequencies(words, target_words=None):
 
     target_words = [w.lower() for w in target_words]
     return {w: freq[w] for w in target_words if w in freq}
+def find_emails(text):
+    pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+    return sorted(set(re.findall(pattern, text)))
 
