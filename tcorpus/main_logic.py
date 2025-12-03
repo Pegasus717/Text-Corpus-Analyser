@@ -53,3 +53,14 @@ def find_anagrams(words):
 
     return sorted(output, key=lambda g: (len(g), g))
 
+def find_frequencies(words, target_words=None):
+    freq = {}
+    for w in words:
+        freq[w] = freq.get(w, 0) + 1
+
+    if not target_words or "all" in [w.lower() for w in target_words]:
+        return dict(sorted(freq.items()))
+
+    target_words = [w.lower() for w in target_words]
+    return {w: freq[w] for w in target_words if w in freq}
+
