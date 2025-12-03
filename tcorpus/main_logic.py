@@ -29,7 +29,6 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
     normalized = [normalize_word(t) for t in tokens]
 
     stopword_set = {normalize_word(w) for w in stopwords} if stopwords else set()
-
     starts_with_char = starts_with[0].lower() if starts_with else None
 
     filtered = []
@@ -44,3 +43,52 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
 
 def find_palindromes(words):
     return sorted({w for w in words if len(w) > 2 and w == w[::-1]})
+def find_anagrams(words):
+    groups = {}
+    for w in words:
+        key = "".join(sorted(w))
+        groups.setdefault(key, set()).add(w)
+
+    output = [sorted(group) for group in groups.values() if len(group) > 1]
+
+    return sorted(output, key=lambda g: (len(g), g))
+
+def find_frequencies(words, target_words=None):
+    freq = {}
+    for w in words:
+        freq[w] = freq.get(w, 0) + 1
+
+    if not target_words or "all" in [w.lower() for w in target_words]:
+        return dict(sorted(freq.items()))
+
+    target_words = [w.lower() for w in target_words]
+    return {w: freq[w] for w in target_words if w in freq}
+def find_emails(text):
+    pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+    return sorted(set(re.findall(pattern, text)))
+
+def find_phone_numbers(text, digits=10):
+    """Extract phone numbers with minimum digit count."""
+    phone_regex = re.compile(
+        r"""
+        (?<!\d)
+        (?:\+?\d{1,3}[\s\-\.]?)?
+        (?:\(?\d{2,4}\)?[\s\-\.]?){1,3}
+        \d{3,4}
+        (?!\d)
+        """,
+        re.VERBOSE,
+    )
+
+    results = set()
+
+    for m in phone_regex.finditer(text):
+        raw = m.group().strip()
+        only_digits = re.sub(r"\D", "", raw)
+        if len(only_digits) >= digits:
+            results.add(raw)
+
+    return sorted(results)
+
+
+
