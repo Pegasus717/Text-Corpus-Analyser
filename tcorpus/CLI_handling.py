@@ -52,3 +52,6 @@ def build_parser():
     p5.add_argument("--contains", help="Word must contain this substring")
     add_word_filters(p5)
 
+    p6 = sub.add_parser("email", help="Extract emails")
+    add_input_options(p6)
+    p6.add_argument("output")
