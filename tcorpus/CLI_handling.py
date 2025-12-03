@@ -1,4 +1,7 @@
 import argparse
+import logging
+from pathlib import Path
+from datetime import datetime
 from .main_logic import (
     extract_words,
     extract_alphanumeric_tokens,
@@ -9,6 +12,7 @@ from .main_logic import (
     find_emails,
     find_phone_numbers,
 )
+
 
 
 def _resolve_input_text(input_value: str, is_text: bool = False) -> str:
@@ -26,7 +30,12 @@ def _resolve_input_text(input_value: str, is_text: bool = False) -> str:
     
     logging.info("Treating input as direct text.")
     return input_value
-
+def _build_stopwords(cli_stopwords, config_path):
+    """Combine stopwords from config and CLI."""
+    combined = set(load_config_stopwords(config_path))
+    if cli_stopwords:
+        combined.update(w.lower() for w in cli_stopwords)
+    return combined
 def process(
     mode,
     input_value,
