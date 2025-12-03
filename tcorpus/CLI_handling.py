@@ -10,6 +10,23 @@ from .main_logic import (
     find_phone_numbers,
 )
 
+
+def _resolve_input_text(input_value: str, is_text: bool = False) -> str:
+    if is_text:
+        logging.info("Using provided text input.")
+        return input_value
+    
+    if not input_value:
+        raise ValueError("No input provided. Use --text to provide text directly or specify a file path.")
+    
+    path = Path(input_value)
+    if path.exists() and path.is_file():
+        logging.info(f"Reading from file: {input_value}")
+        return read_text_file(path)
+    
+    logging.info("Treating input as direct text.")
+    return input_value
+
 def process(
     mode,
     input_value,
@@ -27,6 +44,11 @@ def process(
     contains=None,
     print_words: bool = False,
 ):
+    text = _resolve_input_text(input_value, is_text=is_text)
+    stopwords = _build_stopwords(cli_stopwords, config_path)
+    starts_with_char = starts_with.lower()[0] if starts_with else None
+    words = extract_words(text, stopwords=stopwords or None, starts_with=starts_with_char)
+    result = {}
 
 
 
