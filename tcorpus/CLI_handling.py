@@ -10,7 +10,23 @@ from .main_logic import (
     find_phone_numbers,
 )
 
-
+def process(
+    mode,
+    input_value,
+    output_path,
+    mask=None,
+    target_words=None,
+    phone_digits=None,
+    cli_stopwords=None,
+    starts_with=None,
+    config_path="config.ini",
+    is_text=False,
+    min_length=None,
+    max_length=None,
+    exact_length=None,
+    contains=None,
+    print_words: bool = False,
+):
 
 
 
