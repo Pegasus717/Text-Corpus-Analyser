@@ -13,6 +13,13 @@ from .main_logic import (
     find_phone_numbers,
 )
 
+from .io_utils import read_text_file, write_json, write_csv, load_config_stopwords
+from .profiler import timed
+
+
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s - %(levelname)s - %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S", force=True)
 
 
 def _resolve_input_text(input_value: str, is_text: bool = False) -> str:
@@ -31,11 +38,11 @@ def _resolve_input_text(input_value: str, is_text: bool = False) -> str:
     logging.info("Treating input as direct text.")
     return input_value
 def _build_stopwords(cli_stopwords, config_path):
-    """Combine stopwords from config and CLI."""
     combined = set(load_config_stopwords(config_path))
     if cli_stopwords:
         combined.update(w.lower() for w in cli_stopwords)
     return combined
+
 def process(
     mode,
     input_value,
@@ -59,6 +66,60 @@ def process(
     words = extract_words(text, stopwords=stopwords or None, starts_with=starts_with_char)
     result = {}
 
+
+    if mode in ("palindrome", "all"):
+        result["palindromes"], t = timed(find_palindromes)(words)
+        logging.info(f"Palindromes found in {t:.4f}s")
+
+    if mode in ("anagram", "all"):
+        result["anagrams"], t = timed(find_anagrams)(words)
+        logging.info(f"Anagrams found in {t:.4f}s")
+
+    if mode in ("freq", "all"):
+        result["frequencies"], t = timed(find_frequencies)(words, target_words)
+        logging.info(f"Frequencies calculated in {t:.4f}s")
+
+    if mode == "mask":
+        
+        mask_words = extract_alphanumeric_tokens(text, stopwords=stopwords or None, starts_with=starts_with)
+        result["mask_matches"], t = timed(find_mask_matches)(
+            mask_words, mask, min_length=min_length, max_length=max_length,
+            exact_length=exact_length, contains=contains
+        )
+        logging.info(f"Mask matches found in {t:.4f}s")
+
+    
+    if mode in ("email", "all"):
+        result["emails"] = find_emails(text)
+        logging.info(f"Emails found: {len(result['emails'])}")
+
+    if mode in ("phone", "all"):
+        result["phone_numbers"] = find_phone_numbers(text, digits=phone_digits or 10)
+        logging.info(f"Phone numbers found: {len(result['phone_numbers'])}")
+
+    if print_words:
+        if mode == "palindrome":
+            print("Palindromes:", result.get("palindromes", []))
+        elif mode == "anagram":
+            print("Anagram groups:", result.get("anagrams", []))
+        elif mode == "freq":
+            print("Frequencies:", result.get("frequencies", {}))
+        elif mode == "mask":
+            print("Mask matches:", result.get("mask_matches", []))
+        elif mode == "email":
+            print("Emails:", result.get("emails", []))
+        elif mode == "phone":
+            print("Phone numbers:", result.get("phone_numbers", []))
+        elif mode == "all":
+            for key, value in result.items():
+                print(f"{key.capitalize()}:", value)
+
+    output_path = Path(output_path)
+    if output_path.suffix.lower() == ".csv" and "frequencies" in result:
+        write_csv(output_path, result["frequencies"])
+    else:
+        write_json(output_path, result)
+    logging.info(f"Output saved → {output_path}")
 
 
 def build_parser():
