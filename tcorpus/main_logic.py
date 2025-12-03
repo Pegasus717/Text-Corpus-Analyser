@@ -121,3 +121,27 @@ def _mask_to_regex(mask: str) -> str:
 
     return "^" + "".join(pattern) + "$"
 
+def find_mask_matches(words, mask: str,
+                      min_length=None, max_length=None,
+                      contains=None, exact_length=None):
+    regex = re.compile(_mask_to_regex(mask.lower()))
+
+    matches = []
+    for word in words:
+        w = word.lower()
+
+        if not regex.match(w):
+            continue
+
+        if exact_length is not None and len(word) != exact_length:
+            continue
+        if min_length is not None and len(word) < min_length:
+            continue
+        if max_length is not None and len(word) > max_length:
+            continue
+        if contains and contains.lower() not in w:
+            continue
+
+        matches.append(word)
+
+    return sorted(set(matches))
