@@ -55,3 +55,10 @@ def build_parser():
     p6 = sub.add_parser("email", help="Extract emails")
     add_input_options(p6)
     p6.add_argument("output")
+
+    p7 = sub.add_parser("phone", help="Extract phone numbers")
+    add_input_options(p7)
+    p7.add_argument("output")
+    p7.add_argument("-d", "--digits", type=int, default=10, help="Number of digits")
+
+    return parser
