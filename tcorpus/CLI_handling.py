@@ -41,3 +41,14 @@ def build_parser():
     p4.add_argument("-w", "--words", nargs="+", help="Words to count, 'all' for all")
     p4.add_argument("-d", "--digits", type=int, default=10, help="Number of digits for phone numbers")
     add_word_filters(p4)
+
+    p5 = sub.add_parser("mask", help="Find words matching pattern")
+    p5.add_argument("mask", help="Pattern: 'a*d' (wildcard), 'ram+' (starts with), '+ing' (ends with), '+ram+' (contains)")
+    add_input_options(p5)
+    p5.add_argument("output")
+    p5.add_argument("--min-length", type=int, help="Minimum word length")
+    p5.add_argument("--max-length", type=int, help="Maximum word length")
+    p5.add_argument("--length", type=int, dest="exact_length", help="Exact word length")
+    p5.add_argument("--contains", help="Word must contain this substring")
+    add_word_filters(p5)
+
