@@ -29,7 +29,6 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
     normalized = [normalize_word(t) for t in tokens]
 
     stopword_set = {normalize_word(w) for w in stopwords} if stopwords else set()
-
     starts_with_char = starts_with[0].lower() if starts_with else None
 
     filtered = []
@@ -44,3 +43,13 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
 
 def find_palindromes(words):
     return sorted({w for w in words if len(w) > 2 and w == w[::-1]})
+def find_anagrams(words):
+    groups = {}
+    for w in words:
+        key = "".join(sorted(w))
+        groups.setdefault(key, set()).add(w)
+
+    output = [sorted(group) for group in groups.values() if len(group) > 1]
+
+    return sorted(output, key=lambda g: (len(g), g))
+
