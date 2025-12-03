@@ -29,4 +29,8 @@ def build_parser():
     p2.add_argument("output")
     add_word_filters(p2)
     
-
+    p3 = sub.add_parser("freq")
+    add_input_options(p3)
+    p3.add_argument("output")
+    p3.add_argument("-w", "--words", nargs="+", help="Words to count, 'all' for all")
+    add_word_filters(p3)
