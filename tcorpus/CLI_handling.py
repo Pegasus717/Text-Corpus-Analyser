@@ -1,4 +1,18 @@
 import argparse
+from .main_logic import (
+    extract_words,
+    extract_alphanumeric_tokens,
+    find_palindromes,
+    find_anagrams,
+    find_frequencies,
+    find_mask_matches,
+    find_emails,
+    find_phone_numbers,
+)
+
+
+
+
 
 def build_parser():
     parser = argparse.ArgumentParser(prog="WordTools",
