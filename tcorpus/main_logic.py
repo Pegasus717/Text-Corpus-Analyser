@@ -1,8 +1,11 @@
 import re 
+import unicodedata
 
 def normalize_word(w: str) -> str:
-    normalized = re.sub(r'[^\x00-\x7F]+', '', w.lower())
-    return normalized if normalized else w.lower()
+    nfkd = unicodedata.normalize("NFKD", w)
+    ascii_text = nfkd.encode("ascii", "ignore").decode("ascii")
+    return ascii_text.lower()
+
 
 def extract_words(text: str, stopwords=None, starts_with=None):
     words = re.findall(r"[a-zA-ZÀ-ÖØ-öø-ÿ]+", text)
