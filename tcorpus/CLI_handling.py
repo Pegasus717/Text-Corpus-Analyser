@@ -29,4 +29,15 @@ def build_parser():
     p2.add_argument("output")
     add_word_filters(p2)
     
-
+    p3 = sub.add_parser("freq")
+    add_input_options(p3)
+    p3.add_argument("output")
+    p3.add_argument("-w", "--words", nargs="+", help="Words to count, 'all' for all")
+    add_word_filters(p3)
+    
+    p4 = sub.add_parser("all", help="Run all analyses: palindromes, anagrams, frequencies, emails, phone numbers")
+    add_input_options(p4)
+    p4.add_argument("output")
+    p4.add_argument("-w", "--words", nargs="+", help="Words to count, 'all' for all")
+    p4.add_argument("-d", "--digits", type=int, default=10, help="Number of digits for phone numbers")
+    add_word_filters(p4)
