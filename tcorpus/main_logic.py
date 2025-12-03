@@ -91,4 +91,33 @@ def find_phone_numbers(text, digits=10):
     return sorted(results)
 
 
+def _mask_to_regex(mask: str) -> str:
+
+    mask = mask.strip()
+
+    if mask.endswith('+') and not mask.startswith('+') and '*' not in mask and '?' not in mask:
+        # starts with
+        base = re.escape(mask[:-1])
+        return f"^{base}.*"
+
+    if mask.startswith('+') and not mask.endswith('+') and '*' not in mask and '?' not in mask:
+        # ends with
+        base = re.escape(mask[1:])
+        return f".*{base}$"
+
+    if mask.startswith('+') and mask.endswith('+') and '*' not in mask and '?' not in mask:
+        # contains
+        base = re.escape(mask[1:-1])
+        return f".*{base}.*"
+
+    pattern = []
+    for ch in mask:
+        if ch == '*':
+            pattern.append(".*")
+        elif ch == '?':
+            pattern.append(".")
+        else:
+            pattern.append(re.escape(ch))
+
+    return "^" + "".join(pattern) + "$"
 
