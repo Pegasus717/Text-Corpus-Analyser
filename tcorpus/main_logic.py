@@ -67,3 +67,25 @@ def find_emails(text):
     pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
     return sorted(set(re.findall(pattern, text)))
 
+def find_phone_numbers(text, digits=10):
+    """Extract phone numbers with minimum digit count."""
+    phone_regex = re.compile(
+        r"""
+        (?<!\d)
+        (?:\+?\d{1,3}[\s\-\.]?)?
+        (?:\(?\d{2,4}\)?[\s\-\.]?){1,3}
+        \d{3,4}
+        (?!\d)
+        """,
+        re.VERBOSE,
+    )
+
+    results = set()
+
+    for m in phone_regex.finditer(text):
+        raw = m.group().strip()
+        only_digits = re.sub(r"\D", "", raw)
+        if len(only_digits) >= digits:
+            results.add(raw)
+
+    return sorted(results)
