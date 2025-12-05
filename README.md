@@ -1,7 +1,7 @@
 # tcorpus - Text Corpus Analyser
 
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 A powerful, lightweight command-line tool for analyzing text corpora. Extract palindromes, anagrams, word frequencies, pattern matches, emails, and phone numbers from text files or direct input.
 
@@ -30,6 +30,62 @@ pip install tcorpus
 git clone https://github.com/Pegasus717/Text-Corpus-Analyser.git
 cd text-corpus-analyser
 pip install -e .
+```
+
+### macOS Installation
+
+#### Prerequisites
+
+1. **Install Python 3.8+** (if not already installed):
+   ```bash
+   # Using Homebrew (recommended)
+   brew install python3
+   
+   # Or download from python.org
+   # Visit https://www.python.org/downloads/
+   ```
+
+2. **Verify Python installation**:
+   ```bash
+   python3 --version
+   # Should show Python 3.8 or higher
+   ```
+
+#### Installation Steps
+
+**Option 1: Using pip3 (Recommended for macOS)**
+
+```bash
+# Install from PyPI
+pip3 install tcorpus
+
+# Or install from source
+git clone https://github.com/Pegasus717/Text-Corpus-Analyser.git
+cd text-corpus-analyser
+pip3 install -e .
+```
+
+**Option 2: Using Virtual Environment (Best Practice)**
+
+```bash
+# Create a virtual environment
+python3 -m venv venv
+
+# Activate the virtual environment
+source venv/bin/activate
+
+# Install tcorpus
+pip install tcorpus
+```
+
+**Note:** If you encounter permission errors, use `pip3 install --user tcorpus` to install in user space.
+
+#### Verify Installation
+
+```bash
+tcorpus --help
+# Or if command not found:
+python3 -m tcorpus --help
 ```
 
 ## 🚀 Quick Start
