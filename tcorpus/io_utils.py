@@ -41,9 +41,8 @@ def write_json(path: str, data):
             existing_data[key] = value
     
     path_obj.write_text(json.dumps(existing_data, indent=4), encoding="utf-8")
-    
+
 def write_csv(path: str, data_dict: dict):
-    """Write CSV data, appending to existing file if it exists."""
     path_obj = Path(path)
     existing_data = {}
     file_exists = path_obj.exists()
