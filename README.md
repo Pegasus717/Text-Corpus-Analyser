@@ -1,7 +1,7 @@
 # tcorpus - Text Corpus Analyser
 
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 A powerful, lightweight command-line tool for analyzing text corpora. Extract palindromes, anagrams, word frequencies, pattern matches, emails, and phone numbers from text files or direct input.
 
@@ -369,6 +369,16 @@ Get-ChildItem *.txt | ForEach-Object {
   tcorpus all $_.Name ($_.BaseName + "_analysis.json")
 }
 ```
+
+
+### Key Design Decisions
+
+- **Zero Dependencies**: Uses only Python standard library for maximum compatibility
+- **Modular Architecture**: Separation of concerns (CLI, logic, I/O, profiling)
+- **Flexible Input**: Supports both file paths and direct text input
+- **Smart Output**: Automatic format detection (JSON/CSV), append support
+- **Configurable**: Stopwords via config file or CLI, multiple filter options
+- **Performance Aware**: Built-in timing for analysis operations
 
 ## 📤 Output Formats
 
