@@ -41,3 +41,30 @@ def write_json(path: str, data):
             existing_data[key] = value
     
     path_obj.write_text(json.dumps(existing_data, indent=4), encoding="utf-8")
+    
+def write_csv(path: str, data_dict: dict):
+    """Write CSV data, appending to existing file if it exists."""
+    path_obj = Path(path)
+    existing_data = {}
+    file_exists = path_obj.exists()
+    
+    if file_exists:
+        try:
+            with open(path, "r", newline="", encoding="utf-8") as f:
+                reader = csv.reader(f)
+                next(reader, None)  
+                for row in reader:
+                    if len(row) >= 2:
+                        existing_data[row[0]] = int(row[1]) if row[1].isdigit() else row[1]
+        except (ValueError, IndexError):
+            existing_data = {}
+    
+    for word, count in data_dict.items():
+        existing_data[word] = existing_data.get(word, 0) + count if isinstance(count, (int, float)) else count
+    
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(["word", "count"])
+        for word, count in sorted(existing_data.items()):
+            writer.writerow([word, count])
+
