@@ -26,7 +26,6 @@ class TestLogic(unittest.TestCase):
 
     def test_mask(self):
         words = ["sale", "safe", "site", "size", "sane", "same"]
-        # mask s*e → should match words starting with 's' and ending with 'e'
         out = find_mask_matches(words, "s*e")
         self.assertEqual(sorted(out), ["safe", "sale", "same", "sane", "site", "size"])
 
