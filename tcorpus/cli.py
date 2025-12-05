@@ -15,20 +15,22 @@ def main():
         "config_path": getattr(args, "config", "config.ini"),
     }
 
-    if args.command == "mask":
-        kwargs["mask"] = args.mask
+    if args.command in ("mask", "multi"):
+        kwargs["mask"] = getattr(args, "mask", None)
         kwargs["min_length"] = getattr(args, "min_length", None)
         kwargs["max_length"] = getattr(args, "max_length", None)
         kwargs["exact_length"] = getattr(args, "exact_length", None)
         kwargs["contains"] = getattr(args, "contains", None)
-    elif args.command in ("freq", "all"):
+
+    if args.command in ("freq", "all", "multi"):
         kwargs["target_words"] = getattr(args, "words", None)
-        if args.command == "all":
-            kwargs["phone_digits"] = getattr(args, "digits", 10)
-    elif args.command == "phone":
+
+    if args.command in ("phone", "all", "multi"):
         kwargs["phone_digits"] = getattr(args, "digits", 10)
 
-    # optional: print filtered words list to terminal
+    if args.command == "multi":
+        kwargs["operations"] = args.operations
+
     kwargs["print_words"] = getattr(args, "print_words", False)
 
     process(args.command, input_value, args.output, **kwargs)
