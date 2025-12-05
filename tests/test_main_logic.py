@@ -10,3 +10,6 @@ class TestLogic(unittest.TestCase):
         text = "Café café CAT 123!"
         self.assertEqual(extract_words(text), ["cafe", "cafe", "cat"])
 
+
+if __name__ == "__main__":
+    unittest.main()
