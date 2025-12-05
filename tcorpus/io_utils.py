@@ -5,11 +5,29 @@ import csv
 import configparser
 
 
+
+def load_config_stopwords(config_path: str = "config.ini") -> list[str]:
+    parser = configparser.ConfigParser()
+    if not Path(config_path).exists():
+        return []
+    parser.read(config_path, encoding="utf-8")
+    if "stopwords" not in parser:
+        return []
+    raw = parser["stopwords"].get("words", "")
+    entries = []
+    for chunk in raw.replace("\n", ",").split(","):
+        token = chunk.strip().lower()
+        if token:
+            entries.append(token)
+    return entries
+
+
 def read_text_file(path: str) -> str:
     p = Path(path)
     if p.suffix == ".gz":
         return gzip.decompress(p.read_bytes()).decode("utf-8")
     return p.read_text(encoding="utf-8")
+
 
 
 def write_json(path: str, data):
