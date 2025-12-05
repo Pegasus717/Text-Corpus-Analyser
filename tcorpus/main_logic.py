@@ -4,17 +4,13 @@ from collections import Counter
 
 
 def normalize_word(w: str) -> str:
-    """Normalize word by converting to lowercase and stripping accents to ASCII.
-
-    Example: 'Café' → 'cafe'
-    """
+   
     nfkd = unicodedata.normalize("NFKD", w)
     ascii_text = nfkd.encode("ascii", "ignore").decode("ascii")
     return ascii_text.lower()
 
 
 def extract_words(text: str, stopwords=None, starts_with=None):
-    """Extract alphabetic words, normalize, filter by stopwords & starts_with."""
     words = re.findall(r"[a-zA-ZÀ-ÖØ-öø-ÿ]+", text)
     normalized = [normalize_word(w) for w in words]
 
@@ -34,7 +30,6 @@ def extract_words(text: str, stopwords=None, starts_with=None):
 
 
 def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
-    """Extract alphanumeric tokens (letters + digits), fully normalized."""
 
     tokens = re.findall(r"[a-zA-Z0-9À-ÖØ-öø-ÿ]+", text)
 
@@ -58,13 +53,11 @@ def extract_alphanumeric_tokens(text: str, stopwords=None, starts_with=None):
 
 
 def find_palindromes(words):
-    """Return all palindromes longer than 2 chars."""
     return sorted({w for w in words if len(w) > 2 and w == w[::-1]})
 
 
 
 def find_anagrams(words):
-    """Group words into anagrams using sorted-key dictionary."""
     groups = {}
     for w in words:
         key = "".join(sorted(w))
@@ -78,7 +71,6 @@ def find_anagrams(words):
 
 
 def find_frequencies(words, target_words=None):
-    """Count frequencies. If target_words includes 'all', return whole dict."""
     freq = Counter(words)
 
     if not target_words or "all" in [w.lower() for w in target_words]:
@@ -90,35 +82,22 @@ def find_frequencies(words, target_words=None):
 
 
 def _mask_to_regex(mask: str) -> str:
-    """Convert a mask expression into a regex.
 
-    Supported:
-    - '*' wildcard (0+ chars)
-    - '?' wildcard (1 char)
-    - word+      → starts with word
-    - +word      → ends with word
-    - +word+     → contains word
-    """
 
     mask = mask.strip()
 
-    # Special syntax (no wildcards allowed with this)
     if mask.endswith('+') and not mask.startswith('+') and '*' not in mask and '?' not in mask:
-        # starts with
         base = re.escape(mask[:-1])
         return f"^{base}.*"
 
     if mask.startswith('+') and not mask.endswith('+') and '*' not in mask and '?' not in mask:
-        # ends with
         base = re.escape(mask[1:])
         return f".*{base}$"
 
     if mask.startswith('+') and mask.endswith('+') and '*' not in mask and '?' not in mask:
-        # contains
         base = re.escape(mask[1:-1])
         return f".*{base}.*"
 
-    # Normal wildcard mask conversion
     pattern = []
     for ch in mask:
         if ch == '*':
@@ -134,7 +113,6 @@ def _mask_to_regex(mask: str) -> str:
 def find_mask_matches(words, mask: str,
                       min_length=None, max_length=None,
                       contains=None, exact_length=None):
-    """Find all words matching a mask pattern with optional filters."""
 
     regex = re.compile(_mask_to_regex(mask.lower()))
 
@@ -160,13 +138,11 @@ def find_mask_matches(words, mask: str,
 
 
 def find_emails(text):
-    """Simple email extractor."""
     pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
     return sorted(set(re.findall(pattern, text)))
 
 
 def find_phone_numbers(text, digits=10):
-    """Extract phone numbers with minimum digit count."""
     phone_regex = re.compile(
         r"""
         (?<!\d)
